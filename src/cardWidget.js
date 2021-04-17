@@ -1,23 +1,24 @@
 const formTemplate = `
   <form class="card-widget">
-    <div>
-      <input class="card-widget-input--card-number" type="text" placeholder="Card Number">
-      <span class="card-widget__error-message"></span>
+    <div class="card-widget__item">
+      <input name="card-number" class="card-widget__input card-widget__input--card-number" type="text" placeholder="Card Number">
+      <span class="card-widget__error">Невалидные данные</span>
     </div>
-
-    <div>
-      <input class="card-widget-input--expire-date" type="text" placeholder="Expired Date">
+    <div class="card-widget__item">
+      <input name="expire-date" class="card-widget__input card-widget__input--expire-date" type="text" placeholder="Expired Date">
+      <span class="card-widget__error">Невалидные данные</span>
     </div>
-    
-    <div>
-      <input class="card-widget-input--cvv" type="password" placeholder="CVV">
+    <div class="card-widget__item">
+      <input name="input--cvv" class="card-widget__input card-widget__input--cvv" type="password" placeholder="CVV">
+      <span class="card-widget__error">Невалидные данные</span>
     </div>
-    
-    <div>
-      <input class="card-widget-input--card-holder" type="text" placeholder="Cardholder Name">
+    <div class="card-widget__item">
+      <input name="card-holder" class="card-widget__input card-widget__input--card-holder" type="text" placeholder="Cardholder Name">
+      <span class="card-widget__error">Невалидные данные</span>
+    </div>  
+    <div class="card-widget__item">
+      <button class="card-widget__submit">Submit</button>
     </div>
-    
-    <button class="card-widget-button--submit">Submit</button>
   </form>
 `;
 
@@ -25,11 +26,11 @@ class CardWidget {
 
   constructor(selector) {
     this.root = document.querySelector(selector);
-    this.inputCardNumber = 'card-widget-input--card-number';
-    this.inputExpiredDate = 'card-widget-input--expire-date';
-    this.inputCardHolder = 'card-widget-input--card-holder';
-    this.inputCvv = 'card-widget-input--cvv';
-    this.submitButton = 'card-widget-button--submit';
+    this.inputCardNumber = 'card-widget__input--card-number';
+    this.inputExpiredDate = 'card-widget__input--expire-date';
+    this.inputCardHolder = 'card-widget__input--card-holder';
+    this.inputCvv = 'card-widget__input--cvv';
+    this.submitButton = 'card-widget__submit';
     this.form;
   }
 
@@ -43,7 +44,12 @@ class CardWidget {
 
   submit(e) {
     e.preventDefault();
-    console.log('submitting', e);
+    const formData = new FormData(document.querySelector('.card-widget'));
+    const data = {};
+    for (const [key, value] of formData.entries()) {
+      data[key] = value;
+    }
+    console.log(data)
   }
 
   change(e) {
@@ -64,7 +70,7 @@ class CardWidget {
     const { isValid } = func(e.target.value);
     console.log('isValid', e.target.value, isValid);
 
-    this.submitButtonElement.disabled = !isValid;    
+    this.submitButtonElement.disabled = !isValid;
     console.log('changing', e);
   }
 
@@ -88,14 +94,20 @@ class CardWidget {
     return { isValid }
   }
 
-  validate() {
-    return 
-    let isValid = true;
+  getData() {
+    const formData = new FormData(document.querySelector('.card-widget'));
+    const data = {};
+    for (const [key, value] of formData.entries()) {
+      data[key] = value;
+    }
 
-
-    return isValid;
+    return data;
   }
 
+  // validate() {
+  //   const data = this.getData();
+  //   for ()Object.entries(data)
+  // }
 }
 
 new CardWidget('.selector').render()
