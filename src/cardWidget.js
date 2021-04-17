@@ -26,12 +26,11 @@ class CardWidget {
   constructor(selector) {
     this.root = document.querySelector(selector);
     this.inputCardNumber = 'card-widget-input--card-number';
-    this.inputExpiredDate;
-    this.inputCardHolder;
-    this.inputCvv;
-    this.submitButton
+    this.inputExpiredDate = 'card-widget-input--expire-date';
+    this.inputCardHolder = 'card-widget-input--card-holder';
+    this.inputCvv = 'card-widget-input--cvv';
+    this.submitButton = 'card-widget-button--submit';
     this.form;
-    this.initForm()
   }
 
   render() {
@@ -48,7 +47,6 @@ class CardWidget {
   }
 
   change(e) {
-    let isValid = true;
     let func = '';
 
     if (e.target.classList.contains(this.inputCardNumber)) {
@@ -64,27 +62,30 @@ class CardWidget {
     };
 
     const { isValid } = func(e.target.value);
+    console.log('isValid', e.target.value, isValid);
 
     this.submitButtonElement.disabled = !isValid;    
-
-    // if not valid disable
     console.log('changing', e);
   }
 
-  handleCardHolder(value) {
-
+  handleCardHolder(input) {
+    const isValid = /^\w+ \w+$/.test(input);
+    return { isValid }
   }
 
-  handleCardNumber(value) {
-
+  handleCardNumber(input) {
+    const isValid = /^[0-9]{16}$/.test(input);
+    return { isValid }
   }
 
-  handleExpiredDate(value) {
-
+  handleExpiredDate(input) {
+    const isValid = /^[0-9]{2}\/[0-9]{2}$/.test(input);
+    return { isValid }
   }
 
-  handleCvv(value) {
-    return
+  handleCvv(input) {
+    const isValid = /^[0-9]{3}$/.test(input);
+    return { isValid }
   }
 
   validate() {
